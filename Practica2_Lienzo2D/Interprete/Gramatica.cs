@@ -20,6 +20,8 @@ namespace Proyecto2_Lienzo2D.Interprete
             IdentifierTerminal id = new IdentifierTerminal("id");
             StringLiteral cadena = TerminalFactory.CreateCSharpString("cadena");
             var caracter = TerminalFactory.CreateCSharpChar("caracter");
+            CommentTerminal cs = new CommentTerminal("comentario simple", ">>", "\n");
+            CommentTerminal cm = new CommentTerminal("comentario multilinea", "<-", "->");
             #endregion
 
             #region Terminales
@@ -184,6 +186,9 @@ namespace Proyecto2_Lienzo2D.Interprete
             this.MarkPunctuation("(", ")", ",", ";", "=", "¿", "?", "$");
 
             this.MarkTransient(S, VISIBILIDAD, EXTENDER, SENTENCIAS, SENTENCIA, TIPO, COMPARAR, DECLARAR, E, L_ID, ASIGNAR);
+
+            base.NonGrammarTerminals.Add(cs);
+            base.NonGrammarTerminals.Add(cm);
 
             #endregion
         }
