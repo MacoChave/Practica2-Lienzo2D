@@ -51,12 +51,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControlDOT\ControlDOT.cs" />
+    <Compile Include="ControlDOT\Reportes.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Interprete\ErrorEjecucion.cs" />
     <Compile Include="Interprete\Gramatica.cs" />
     <Compile Include="Interprete\Sintactico.cs" />
     <Compile Include="Program.cs" />

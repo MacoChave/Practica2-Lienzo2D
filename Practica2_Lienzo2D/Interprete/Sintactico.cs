@@ -7,6 +7,7 @@ using System.Drawing;
 using Irony.Ast;
 using Irony.Parsing;
 using System.IO;
+using Practica2_Lienzo2D.ControlDOT;
 
 
 namespace Proyecto2_Lienzo2D.Interprete
@@ -19,6 +20,9 @@ namespace Proyecto2_Lienzo2D.Interprete
             LanguageData lenguaje = new LanguageData(gramatica);
             Parser parser = new Parser(lenguaje);
             ParseTree arbol = parser.Parse(cadena);
+
+            Reportes reporte = new Reportes();
+            reporte.TablaErrores(gramatica.lista);
 
             return arbol.Root;
         }

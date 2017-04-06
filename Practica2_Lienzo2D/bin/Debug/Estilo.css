@@ -1,0 +1,47 @@
+* {
+    margin: 0;
+    padding: 0;
+    background: lemonchiffon;
+}
+
+h1 {
+    text-align: center;
+    margin: 1em;
+    text-shadow: 2px 2px 5px -2px;
+}
+
+.fecha, .hora {
+    display: flex;
+    justify-content: center;
+}
+
+.fecha p {
+    font-size: 2em;
+    margin-bottom: 1em;
+}
+
+.hora p {
+    font-size: 1em;
+    margin-top: 1em;
+}
+
+.tabla {
+    border-collapse: collapse;
+    margin: auto;
+}
+
+.tabla tr th {
+    background: cornflowerblue;
+    line-height: 2;
+    padding: .6rem;
+    font-size: 1.5em;
+}
+
+.tabla tr td {
+    text-align: center;
+    font-size: 1.2em;
+}
+
+.tabla tr:nth-child(2n) td {
+    background: lightblue;
+}

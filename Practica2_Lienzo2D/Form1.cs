@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -48,7 +49,11 @@ namespace Practica2_Lienzo2D
 
         private void buttonAnalizar_Click(object sender, EventArgs e)
         {
-            resultado = Sintactico.analizar(richTextBoxCaja.Text);
+            if (richTextBoxCaja.Text == "")
+                errorProvider.SetError(buttonAnalizar, "La caja de texto se encuentra vacío");
+            else
+                resultado = Sintactico.analizar(richTextBoxCaja.Text);
+                
             if (resultado != null)
             {
                 try
@@ -66,13 +71,12 @@ namespace Practica2_Lienzo2D
 
         private void buttonAST_Click(object sender, EventArgs e)
         {
-
+            Process.Start("D:\\Totto\\Visual Studio 2013\\Practica2_Lienzo2D\\Practica2_Lienzo2D\\bin\\Debug\\AST.png");
         }
 
         private void buttonTablas_Click(object sender, EventArgs e)
         {
-
+            Process.Start("D:\\Totto\\Visual Studio 2013\\Practica2_Lienzo2D\\Practica2_Lienzo2D\\bin\\Debug\\reportes.html");
         }
-
     }
 }

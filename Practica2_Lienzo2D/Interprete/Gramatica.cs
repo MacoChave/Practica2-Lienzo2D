@@ -5,11 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Irony.Ast;
 using Irony.Parsing;
+using Practica2_Lienzo2D.Interprete;
 
 namespace Proyecto2_Lienzo2D.Interprete
 {
     class Gramatica : Grammar
     {
+        public List<ErrorEjecucion> lista = new List<ErrorEjecucion>();
+
         public Gramatica() : base(caseSensitive: true)
         {
             #region ER
@@ -99,7 +102,8 @@ namespace Proyecto2_Lienzo2D.Interprete
              */
             S.Rule = PROGRAMA;
 
-            PROGRAMA.Rule = VISIBILIDAD + lienzo + id + EXTENDER + ToTerm("¿") + SENTENCIAS + ToTerm("?");
+            PROGRAMA.Rule = VISIBILIDAD + lienzo + id + EXTENDER + ToTerm("¿") + SENTENCIAS + ToTerm("?")
+                | SyntaxError;
 
             VISIBILIDAD.Rule = publico | privado | Empty;
 
@@ -182,6 +186,32 @@ namespace Proyecto2_Lienzo2D.Interprete
             this.MarkTransient(S, VISIBILIDAD, EXTENDER, SENTENCIAS, SENTENCIA, TIPO, COMPARAR, DECLARAR, E, L_ID, ASIGNAR);
 
             #endregion
+        }
+
+        public override void ReportParseError(ParsingContext context)
+        {
+            String error = (String)context.CurrentToken.ValueString;
+            String tipo;
+            int fila, columna;
+
+            if (error.Contains("Invalid character"))
+            {
+                tipo = "Error Lexico";
+                string delimStr = ":";
+                char[] delimitador = delimStr.ToCharArray();
+                string[] division = error.Split(delimitador, 2);
+                division = division[1].Split('.');
+                error = "Caracter Invalido " + division[0];
+            }
+            else
+                tipo = "Error Sintactico";
+
+            fila = context.Source.Location.Line;
+            columna = context.Source.Location.Column;
+            ErrorEjecucion nuevo = new ErrorEjecucion(tipo, error, columna, fila);
+            this.lista.Add(nuevo);
+
+            base.ReportParseError(context);
         }
     }
 }
