@@ -56,6 +56,9 @@ namespace Proyecto2_Lienzo2D.Interprete
             var privado = ToTerm("privado");
             var lienzo = ToTerm("Lienzo");
             var extiende = ToTerm("extiende");
+            /*  VARIABLES   */
+            var Conservar = ToTerm("Conservar");
+            var variable = ToTerm("var");
 
             #endregion
 
@@ -75,16 +78,25 @@ namespace Proyecto2_Lienzo2D.Interprete
                 PARA = new NonTerminal("PARA"),
                 MIENTRAS = new NonTerminal("MIENTRAS"),
                 HACER = new NonTerminal("HACER"),
-                L_ID = new NonTerminal("LST ID"),
-                ASIGNACION = new NonTerminal("ASIGNACION"),
-                COMPARACION = new NonTerminal("COMPARACION"),
+                DECLARACION = new NonTerminal("DECLARACION"),
                 DECLARAR = new NonTerminal("DECLARAR"),
+                CONSERVAR = new NonTerminal("CONSERVAR"),
+                L_ID = new NonTerminal("LST ID"),
+                ID = new NonTerminal("ID"),
+                ASIGNACION = new NonTerminal("ASIGNACION"),
+                ASIGNAR = new NonTerminal("ASIGNAR"),
+                MODIFICAR = new NonTerminal("MODIFICAR"),
+                COMPARACION = new NonTerminal("COMPARACION"),
                 COMPARAR = new NonTerminal("COMPARAR"),
                 TIPO = new NonTerminal("TIPO"),
                 E = new NonTerminal("E");
             #endregion
 
             #region Gramatica
+            /*
+             *      CABECERA
+             *      
+             */
             S.Rule = PROGRAMA;
 
             PROGRAMA.Rule = VISIBILIDAD + lienzo + id + EXTENDER + ToTerm("¿") + SENTENCIAS + ToTerm("?");
@@ -97,19 +109,17 @@ namespace Proyecto2_Lienzo2D.Interprete
 
             SENTENCIAS.Rule = MakePlusRule(SENTENCIAS, SENTENCIA);
 
-            SENTENCIA.Rule = SI | PARA | MIENTRAS | HACER | ASIGNACION;
+            SENTENCIA.Rule = SI | PARA | MIENTRAS | HACER | DECLARACION + ToTerm("$") | ASIGNAR + ToTerm("$");
 
             /*
-             * si ( CONDICION ) ¿ SENTENCIA ? sino ¿ SENTENCIA ?
-             * para ( INICIO_PARA ; FIN_PARA; CONDICION) ¿ SENTENCIA ?
-             * mientras ( CONDICION ) ¿ SENTENCIA ?
-             * hacer ¿ SENTENCIA ? mientras ( CONDICION ) $
+             *      SENTENCIAS DE CONTROL
+             *      
              */
             SI.Rule = sentencia_si + ToTerm("(") + COMPARACION + ToTerm(")") + 
                 ToTerm("¿") + SENTENCIA + ToTerm("?") + 
                 sentencia_sino + ToTerm("¿") + SENTENCIA + ToTerm("?");
 
-            PARA.Rule = sentencia_para + ToTerm("(") + ASIGNACION + ToTerm(";") + COMPARACION + ToTerm(";") + COMPARACION + ToTerm(")") + 
+            PARA.Rule = sentencia_para + ToTerm("(") + DECLARACION + ToTerm(";") + COMPARACION + ToTerm(";") + ASIGNAR + ToTerm(")") + 
                 ToTerm("¿") + SENTENCIA + ToTerm("?");
 
             MIENTRAS.Rule = sentencia_mientras + ToTerm("(") + COMPARACION + ToTerm(")") + 
@@ -117,15 +127,27 @@ namespace Proyecto2_Lienzo2D.Interprete
 
             HACER.Rule = sentencia_hacer + ToTerm("¿") + SENTENCIA + ToTerm("?") +
                 sentencia_mientras + ToTerm("(") + COMPARACION + ToTerm(")") + ToTerm("$");
-
+            
             /*
-             * CONDICION -> COMPARACION
-             * INICIO_PARA -> ASIGNACION
-             * FIN_PARA  -> COMPARACION
+             *      VARIABLES
+             *      
              */
-            ASIGNACION.Rule = DECLARAR + ToTerm("=") + E + ToTerm("$");
+            DECLARACION.Rule = DECLARAR + L_ID;
 
-            DECLARAR.Rule = TIPO + id;
+            DECLARAR.Rule = CONSERVAR + variable + TIPO | Empty;
+
+            CONSERVAR.Rule = Conservar | Empty;
+
+            L_ID.Rule = L_ID + ToTerm(",") + ID | ID;
+
+            ID.Rule = ASIGNACION | E;
+
+            ASIGNACION.Rule = id + ToTerm("=") + E;
+
+            ASIGNAR.Rule = ASIGNACION | MODIFICAR;
+
+            MODIFICAR.Rule = E + mas + mas
+                | E + menos + menos;
 
             COMPARACION.Rule = E + COMPARAR + E;
 
@@ -133,6 +155,10 @@ namespace Proyecto2_Lienzo2D.Interprete
 
             COMPARAR.Rule = igual | menor | mayor | menor_igual | mayor_igual | diferente;
 
+            /*
+             *      ARITMETICA
+             *      
+             */
             E.Rule = E + mas + E
                 | E + menos + E
                 | E + por + E
@@ -153,7 +179,7 @@ namespace Proyecto2_Lienzo2D.Interprete
 
             this.MarkPunctuation("(", ")", ",", ";", "=", "¿", "?", "$");
 
-            this.MarkTransient(S, VISIBILIDAD, EXTENDER, SENTENCIAS, SENTENCIA, TIPO, COMPARAR, DECLARAR, E);
+            this.MarkTransient(S, VISIBILIDAD, EXTENDER, SENTENCIAS, SENTENCIA, TIPO, COMPARAR, DECLARAR, E, L_ID, ASIGNAR);
 
             #endregion
         }
