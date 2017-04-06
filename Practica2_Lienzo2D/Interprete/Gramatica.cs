@@ -25,7 +25,7 @@ namespace Proyecto2_Lienzo2D.Interprete
             var menos = ToTerm("-");
             var por = ToTerm("*");
             var div = ToTerm("/");
-            /*  OPERADORES COMPARAR   */
+            /*  OPERADORES RELACIONALES   */
             var igual = ToTerm("==");
             var menor = ToTerm("<");
             var mayor = ToTerm(">");
@@ -38,7 +38,7 @@ namespace Proyecto2_Lienzo2D.Interprete
             var not = ToTerm("!");
             var nand = ToTerm("!&&");
             var nor = ToTerm("!||");
-            var xor = ToTerm("|&"); */
+            var xor = ToTerm("&|"); */
             /*  TIPOS DE DATOS  */
             var tipo_cadena = ToTerm("cadena");
             var tipo_caracter = ToTerm("caracter");
@@ -51,12 +51,21 @@ namespace Proyecto2_Lienzo2D.Interprete
             var sentencia_para = ToTerm("para");
             var sentencia_mientras = ToTerm("mientras");
             var sentencia_hacer = ToTerm("hacer");
+            /*  ENCABEZADO  */
+            var publico = ToTerm("publico");
+            var privado = ToTerm("privado");
+            var lienzo = ToTerm("Lienzo");
+            var extiende = ToTerm("extiende");
 
             #endregion
 
             #region No Terminales
             NonTerminal S = new NonTerminal("S"),
                 PROGRAMA = new NonTerminal("PROGRAMA"),
+                VISIBILIDAD = new NonTerminal("VISIBILIDAD"),
+                EXTENDER = new NonTerminal("EXTENDER"),
+                EXT = new NonTerminal("EXT"),
+                SENTENCIAS = new NonTerminal("SENTENCIAS"),
                 SENTENCIA = new NonTerminal("SENTENCIA"),
                 CONDICION = new NonTerminal("CONDICION"),
                 INICIO_PARA = new NonTerminal("INICIO PARA"),
@@ -69,17 +78,24 @@ namespace Proyecto2_Lienzo2D.Interprete
                 L_ID = new NonTerminal("LST ID"),
                 ASIGNACION = new NonTerminal("ASIGNACION"),
                 COMPARACION = new NonTerminal("COMPARACION"),
-                DECLARACION = new NonTerminal("DECLARAR"),
+                DECLARAR = new NonTerminal("DECLARAR"),
                 COMPARAR = new NonTerminal("COMPARAR"),
                 TIPO = new NonTerminal("TIPO"),
                 E = new NonTerminal("E");
-
             #endregion
 
             #region Gramatica
             S.Rule = PROGRAMA;
 
-            PROGRAMA.Rule = MakePlusRule(PROGRAMA, SENTENCIA);
+            PROGRAMA.Rule = VISIBILIDAD + lienzo + id + EXTENDER + ToTerm("¿") + SENTENCIAS + ToTerm("?");
+
+            VISIBILIDAD.Rule = publico | privado | Empty;
+
+            EXTENDER.Rule = extiende + EXT | Empty;
+
+            EXT.Rule = MakePlusRule(EXT, ToTerm(","), id);
+
+            SENTENCIAS.Rule = MakePlusRule(SENTENCIAS, SENTENCIA);
 
             SENTENCIA.Rule = SI | PARA | MIENTRAS | HACER | ASIGNACION;
 
@@ -107,9 +123,9 @@ namespace Proyecto2_Lienzo2D.Interprete
              * INICIO_PARA -> ASIGNACION
              * FIN_PARA  -> COMPARACION
              */
-            ASIGNACION.Rule = DECLARACION + ToTerm("=") + E + ToTerm("$");
+            ASIGNACION.Rule = DECLARAR + ToTerm("=") + E + ToTerm("$");
 
-            DECLARACION.Rule = TIPO + id;
+            DECLARAR.Rule = TIPO + id;
 
             COMPARACION.Rule = E + COMPARAR + E;
 
@@ -137,7 +153,7 @@ namespace Proyecto2_Lienzo2D.Interprete
 
             this.MarkPunctuation("(", ")", ",", ";", "=", "¿", "?", "$");
 
-            this.MarkTransient(S, SENTENCIA, TIPO);
+            this.MarkTransient(S, VISIBILIDAD, EXTENDER, SENTENCIAS, SENTENCIA, TIPO, COMPARAR, DECLARAR, E);
 
             #endregion
         }
