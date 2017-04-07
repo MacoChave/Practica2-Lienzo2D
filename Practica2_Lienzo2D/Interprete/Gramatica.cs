@@ -30,6 +30,7 @@ namespace Proyecto2_Lienzo2D.Interprete
             var menos = ToTerm("-");
             var por = ToTerm("*");
             var div = ToTerm("/");
+            var pot = ToTerm("^");
             /*  OPERADORES RELACIONALES   */
             var igual = ToTerm("==");
             var menor = ToTerm("<");
@@ -62,9 +63,13 @@ namespace Proyecto2_Lienzo2D.Interprete
             var lienzo = ToTerm("Lienzo");
             var extiende = ToTerm("extiende");
             /*  VARIABLES   */
-            var Conservar = ToTerm("Conservar");
+            var conservar = ToTerm("Conservar");
             var variable = ToTerm("var");
-
+            /*  METODOS   */
+            var principal = ToTerm("Principal");
+            var pintorP = ToTerm("Pintar_P");
+            var pintarOR = ToTerm("Pintar_OR");
+            var retorno = ToTerm("Retorno");
             #endregion
 
             #region No Terminales
@@ -94,6 +99,14 @@ namespace Proyecto2_Lienzo2D.Interprete
                 COMPARACION = new NonTerminal("COMPARACION"),
                 COMPARAR = new NonTerminal("COMPARAR"),
                 TIPO = new NonTerminal("TIPO"),
+                PINTARP = new NonTerminal("PINTAR P"),
+                PINTAROR = new NonTerminal("PINTAR OR"),
+                PRINCIPAL = new NonTerminal("PRINCIPAL"),
+                PROCEDIMIENTO = new NonTerminal("PROCEDIMIENTO"),
+                MODMETODO = new NonTerminal ("MOD METODO"),
+                PARAMETROS = new NonTerminal("PARAMETROS"),
+                PARAMETRO = new NonTerminal("PARAMETRO"),
+                RETORNO = new NonTerminal("RETORNO"),
                 E = new NonTerminal("E");
             #endregion
 
@@ -115,7 +128,7 @@ namespace Proyecto2_Lienzo2D.Interprete
 
             SENTENCIAS.Rule = MakePlusRule(SENTENCIAS, SENTENCIA);
 
-            SENTENCIA.Rule = SI | PARA | MIENTRAS | HACER | DECLARACION + ToTerm("$") | ASIGNAR + ToTerm("$");
+            SENTENCIA.Rule = SI | PARA | MIENTRAS | HACER | PRINCIPAL | PINTARP | PINTAROR | PROCEDIMIENTO | DECLARACION + ToTerm("$") | ASIGNAR + ToTerm("$");
 
             /*
              *      SENTENCIAS DE CONTROL
@@ -142,7 +155,7 @@ namespace Proyecto2_Lienzo2D.Interprete
 
             DECLARAR.Rule = CONSERVAR + variable + TIPO | Empty;
 
-            CONSERVAR.Rule = Conservar | Empty;
+            CONSERVAR.Rule = conservar | Empty;
 
             L_ID.Rule = L_ID + ToTerm(",") + ID | ID;
 
@@ -169,12 +182,32 @@ namespace Proyecto2_Lienzo2D.Interprete
                 | E + menos + E
                 | E + por + E
                 | E + div + E
+                | E + pot + E
                 | ToTerm("(") + E + ToTerm(")")
                 | numero
                 | id
                 | cadena
                 | caracter;
+            /*
+             *      PROCEDIMIENTOS
+             *      
+             */
+            PROCEDIMIENTO.Rule = MODMETODO + id + ToTerm("(") + PARAMETROS + ToTerm(")") + ToTerm("¿") + SENTENCIAS + RETORNO + ToTerm("?");
 
+            MODMETODO.Rule = CONSERVAR + TIPO | Empty;
+
+            PARAMETROS.Rule = PARAMETROS + ToTerm(",") + PARAMETRO
+                | PARAMETRO;
+
+            PARAMETRO.Rule = TIPO + id;
+
+            RETORNO.Rule = retorno + id + ToTerm("$");
+
+            PINTARP.Rule = pintorP + ToTerm("(") + E + ToTerm(",") + E + ToTerm(",") + E + ToTerm(",") + E + ToTerm(")") + ToTerm("$");
+
+            PINTAROR.Rule = pintarOR + ToTerm("(") + E + ToTerm(",") + E + ToTerm(",") + E + ToTerm(",") + E + ToTerm(",") + E + ToTerm(",") + E + ToTerm(")") + ToTerm("$");
+
+            PRINCIPAL.Rule = principal + ToTerm("(") + ToTerm(")") + ToTerm("¿") + SENTENCIA + ToTerm("?");
             #endregion
 
             #region Preferencias
@@ -185,7 +218,7 @@ namespace Proyecto2_Lienzo2D.Interprete
 
             this.MarkPunctuation("(", ")", ",", ";", "=", "¿", "?", "$");
 
-            this.MarkTransient(S, VISIBILIDAD, EXTENDER, SENTENCIAS, SENTENCIA, TIPO, COMPARAR, DECLARAR, E, L_ID, ASIGNAR);
+            this.MarkTransient(S, VISIBILIDAD, EXTENDER, SENTENCIAS, SENTENCIA, TIPO, COMPARAR, DECLARAR, E, L_ID, ASIGNAR, PARAMETROS, CONSERVAR);
 
             base.NonGrammarTerminals.Add(cs);
             base.NonGrammarTerminals.Add(cm);

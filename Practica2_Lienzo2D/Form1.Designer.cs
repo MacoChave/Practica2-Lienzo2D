@@ -100,6 +100,7 @@
             this.richTextBoxCaja.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBoxCaja.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBoxCaja.Location = new System.Drawing.Point(12, 90);
             this.richTextBoxCaja.Name = "richTextBoxCaja";
             this.richTextBoxCaja.Size = new System.Drawing.Size(660, 358);
