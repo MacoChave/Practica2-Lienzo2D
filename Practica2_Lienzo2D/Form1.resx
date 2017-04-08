@@ -145,6 +145,36 @@
         562MjPPAPEMt/4QROjJuI4cQPoxEsLVd61bAAAAAAElFTkSuQmCC
 </value>
   </data>
+  <data name="richTextBoxCaja.Text" xml:space="preserve">
+    <value>publico Lienzo Prueba
+¿
+	Principal()
+	¿
+		Pintar_P(x, 5, color, D)$
+	?
+
+	Conservar entero metodo(entero x, entero y)
+	¿
+		Pintar_OR(x, y, color, W, H, 'r')$
+
+		Retorno x$
+	?
+
+	&lt;- DECLARAR DOS VARIABLES
+	Y ASIGNARLES UN VALOR A LAS DOS -&gt;
+	var entero a, b = 5$
+	si (a &gt; b)
+	¿
+		para (var entero i = 0; i &lt; 5; i++)
+		¿
+			i++$ &gt;&gt; AUMENTAR 1 A i
+		?
+	? sino
+	¿
+		Pintar_OR(x, 5, color, W, H, 'o')$
+	?
+?</value>
+  </data>
   <data name="buttonAnalizar.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8

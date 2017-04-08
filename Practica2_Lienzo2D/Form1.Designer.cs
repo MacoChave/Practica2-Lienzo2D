@@ -97,15 +97,18 @@
             // 
             // richTextBoxCaja
             // 
+            this.richTextBoxCaja.AcceptsTab = true;
             this.richTextBoxCaja.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBoxCaja.AutoWordSelection = true;
+            this.richTextBoxCaja.BulletIndent = 4;
             this.richTextBoxCaja.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBoxCaja.Location = new System.Drawing.Point(12, 90);
             this.richTextBoxCaja.Name = "richTextBoxCaja";
             this.richTextBoxCaja.Size = new System.Drawing.Size(660, 358);
             this.richTextBoxCaja.TabIndex = 2;
-            this.richTextBoxCaja.Text = "";
+            this.richTextBoxCaja.Text = resources.GetString("richTextBoxCaja.Text");
             // 
             // buttonAnalizar
             // 
